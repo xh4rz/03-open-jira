@@ -5,6 +5,7 @@ interface ContextProps {
 
 	// Methods
 	openSideMenu: () => void;
+	closeSideMenu: () => void;
 }
 
 export const UIContext = createContext({} as ContextProps);

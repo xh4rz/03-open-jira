@@ -1,1 +1,1 @@
-export const UIReducer = () => {};
+export const uiReducer = () => {};

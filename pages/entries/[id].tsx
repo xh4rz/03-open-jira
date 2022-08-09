@@ -1,3 +1,4 @@
+import { ChangeEvent, useState } from 'react';
 import {
 	capitalize,
 	Grid,
@@ -22,16 +23,31 @@ import { EntryStatus } from '../../interfaces';
 const validStatus: EntryStatus[] = ['pending', 'in-progress', 'finished'];
 
 export const EntryPage = () => {
+	const [inputValue, setInputValue] = useState('');
+	const [status, setStatus] = useState<EntryStatus>('pending');
+	const [touched, setTouched] = useState(false);
+
+	const onInputValueChanged = (event: ChangeEvent<HTMLInputElement>) => {
+		setInputValue(event.target.value);
+	};
+
+	const onStatusChanged = (event: ChangeEvent<HTMLInputElement>) => {
+		setStatus(event.target.value as EntryStatus);
+	};
+
+	const onSave = () => {
+		console.log({ inputValue, status });
+	};
+
 	return (
 		<Layout title="algo">
 			<Grid container justifyContent="center" sx={{ marginTop: 2 }}>
 				<Grid item xs={12} sm={8} md={6}>
 					<Card>
 						<CardHeader
-							title="Entrada:"
+							title={`Entrada: ${inputValue}`}
 							subheader={`Creada hace ... minutos`}
 						/>
-
 						<CardContent>
 							<TextField
 								sx={{ marginTop: 2, marginBottom: 1 }}
@@ -40,10 +56,12 @@ export const EntryPage = () => {
 								autoFocus
 								multiline
 								label="Nueva entrada"
+								value={inputValue}
+								onChange={onInputValueChanged}
 							/>
 							<FormControl>
 								<FormLabel>Estado:</FormLabel>
-								<RadioGroup row>
+								<RadioGroup row value={status} onChange={onStatusChanged}>
 									{validStatus.map((option) => (
 										<FormControlLabel
 											key={option}
@@ -60,6 +78,7 @@ export const EntryPage = () => {
 								startIcon={<SaveOutlinedIcon />}
 								variant="contained"
 								fullWidth
+								onClick={onSave}
 							>
 								Save
 							</Button>

@@ -1,14 +1,25 @@
 import {
+	capitalize,
 	Grid,
 	Card,
 	CardHeader,
 	CardContent,
 	TextField,
 	CardActions,
-	Button
+	Button,
+	FormControl,
+	FormLabel,
+	RadioGroup,
+	FormControlLabel,
+	Radio,
+	IconButton
 } from '@mui/material';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { Layout } from '../../components/layouts';
+import { EntryStatus } from '../../interfaces';
+
+const validStatus: EntryStatus[] = ['pending', 'in-progress', 'finished'];
 
 export const EntryPage = () => {
 	return (
@@ -30,7 +41,19 @@ export const EntryPage = () => {
 								multiline
 								label="Nueva entrada"
 							/>
-							{/* RADIO */}
+							<FormControl>
+								<FormLabel>Estado:</FormLabel>
+								<RadioGroup row>
+									{validStatus.map((option) => (
+										<FormControlLabel
+											key={option}
+											value={option}
+											control={<Radio />}
+											label={capitalize(option)}
+										/>
+									))}
+								</RadioGroup>
+							</FormControl>
 						</CardContent>
 						<CardActions>
 							<Button
@@ -44,6 +67,16 @@ export const EntryPage = () => {
 					</Card>
 				</Grid>
 			</Grid>
+			<IconButton
+				sx={{
+					position: 'fixed',
+					bottom: 30,
+					right: 30,
+					backgroundColor: 'error.dark'
+				}}
+			>
+				<DeleteOutlinedIcon />
+			</IconButton>
 		</Layout>
 	);
 };

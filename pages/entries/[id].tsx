@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import {
 	capitalize,
 	Grid,
@@ -26,6 +26,11 @@ export const EntryPage = () => {
 	const [inputValue, setInputValue] = useState('');
 	const [status, setStatus] = useState<EntryStatus>('pending');
 	const [touched, setTouched] = useState(false);
+
+	const isNotValid = useMemo(
+		() => inputValue.length <= 0 && touched,
+		[inputValue, touched]
+	);
 
 	const onInputValueChanged = (event: ChangeEvent<HTMLInputElement>) => {
 		setInputValue(event.target.value);
@@ -58,6 +63,9 @@ export const EntryPage = () => {
 								label="Nueva entrada"
 								value={inputValue}
 								onChange={onInputValueChanged}
+								onBlur={() => setTouched(true)}
+								helperText={isNotValid && 'Ingrese un valor'}
+								error={isNotValid}
 							/>
 							<FormControl>
 								<FormLabel>Estado:</FormLabel>
@@ -79,6 +87,7 @@ export const EntryPage = () => {
 								variant="contained"
 								fullWidth
 								onClick={onSave}
+								disabled={inputValue.length <= 0}
 							>
 								Save
 							</Button>

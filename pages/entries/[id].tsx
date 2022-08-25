@@ -19,13 +19,13 @@ import {
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { Layout } from '../../components/layouts';
-import { EntryStatus } from '../../interfaces';
-import { isValidObjectId } from 'mongoose';
+import { EntryStatus, Entry } from '../../interfaces';
+import { dbEntries } from '../../database';
 
 const validStatus: EntryStatus[] = ['pending', 'in-progress', 'finished'];
 
 interface Props {
-	age: number;
+	entry: Entry;
 }
 
 export const EntryPage: FC<Props> = (props) => {
@@ -122,7 +122,9 @@ export const EntryPage: FC<Props> = (props) => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 	const { id } = params as { id: string };
 
-	if (!isValidObjectId(id)) {
+	const entry = await dbEntries.getEntryById(id);
+
+	if (!entry) {
 		return {
 			redirect: {
 				destination: '/',
@@ -133,7 +135,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 	return {
 		props: {
-			id
+			entry: entry
 		}
 	};
 };
